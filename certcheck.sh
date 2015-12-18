@@ -25,16 +25,17 @@ while read CERTS; do
 done < $CERT_FILE
 
 #check for certs expiring in 1 year or less, get their names and expiration dates
-while read CERTS; do
-  cert_name=`openssl x509 -subject -noout -in $CERTS | sed 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
-  cert_date=`openssl x509 -enddate -noout -in $CERTS | sed 's/.*=//'`
-  if openssl x509 -checkend $seconds_1y -noout -in $CERTS
-  then
-    :
-  else
-    echo "$cert_name will expire on $cert_date" >> temp_1y.dat
-  fi
-done < $CERT_FILE
+#this is commented out because 1 year is too long
+#while read CERTS; do
+#  cert_name=`openssl x509 -subject -noout -in $CERTS | sed 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
+#  cert_date=`openssl x509 -enddate -noout -in $CERTS | sed 's/.*=//'`
+#  if openssl x509 -checkend $seconds_1y -noout -in $CERTS
+#  then
+#    :
+#  else
+#    echo "$cert_name will expire on $cert_date" >> temp_1y.dat
+#  fi
+#done < $CERT_FILE
 
 #if files exist, email to alert
 if [ -e "temp_30.dat" ]
