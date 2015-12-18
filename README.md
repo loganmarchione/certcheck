@@ -21,7 +21,7 @@ Subject:
 Certificates expiring in 1 year or less on web01
 
 Body:
-www.loganmarchione.com will expire on Apr 17 07:56:04 2016 GMT
-www.mariapietropola.com will expire on Nov  6 09:21:27 2016 GMT
-www.blackholeroutercondition.com will expire on Apr 14 00:11:28 2016 GMT
+www.site1.com will expire on Apr 17 07:56:04 2016 GMT
+www.site2.com will expire on Nov  6 09:21:27 2016 GMT
+www.site3.com will expire on Apr 14 00:11:28 2016 GMT
 ```

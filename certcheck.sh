@@ -9,7 +9,7 @@ seconds_1y=$(($seconds_1d * 365))
 
 #Other variables, change as needed
 CERT_FILE=/etc/nginx/ssl/certs.dat
-RECIPIENT=loganmarchione@gmail.com
+RECIPIENT=youremail@example.com
 HOSTNAME=`hostname`
 
 #check for certs expiring in 30 days or less, get their names and expiration dates
