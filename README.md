@@ -1,5 +1,6 @@
 #certcheck
 Bash script to check expiration date on SSL certificates.
+This could be combined with a mailserver to send a message to the user.
 
 ##Requirements
 Should work with any Linux distro with standard tools installed (openssl, curl, grep, etc...).  

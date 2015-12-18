@@ -7,32 +7,47 @@ seconds_1w=$(($seconds_1d * 7))
 seconds_30d=$(($seconds_1d * 30))
 seconds_1y=$(($seconds_1d * 365))
 
-#Other variables
+#Other variables, change as needed
 CERT_FILE=/etc/nginx/ssl/certs.dat
+RECIPIENT=loganmarchione@gmail.com
+HOSTNAME=`hostname`
 
-#30 day while loop
-echo -e "\n30 day expiration"
+#check for certs expiring in 30 days or less, get their names and expiration dates
 while read CERTS; do
-  cert_name=`openssl x509 -subject -noout -in $CERTS | sed -e 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
+  cert_name=`openssl x509 -subject -noout -in $CERTS | sed 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
+  cert_date=`openssl x509 -enddate -noout -in $CERTS | sed 's/.*=//'`
   if openssl x509 -checkend $seconds_30d -noout -in $CERTS
   then
     :
   else
-    echo $cert_name
+    echo "$cert_name will expire on $cert_date" >> temp_30d.dat
   fi
 done < $CERT_FILE
 
-#1 year while loop
-echo -e "\n1 year expiration"
+#check for certs expiring in 1 year or less, get their names and expiration dates
 while read CERTS; do
-  cert_name=`openssl x509 -subject -noout -in $CERTS | sed -e 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
+  cert_name=`openssl x509 -subject -noout -in $CERTS | sed 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
+  cert_date=`openssl x509 -enddate -noout -in $CERTS | sed 's/.*=//'`
   if openssl x509 -checkend $seconds_1y -noout -in $CERTS
   then
     :
   else
-    echo $cert_name
+    echo "$cert_name will expire on $cert_date" >> temp_1y.dat
   fi
 done < $CERT_FILE
 
+#if files exist, email to alert
+if [ -e "temp_30.dat" ]
+  then
+    mail -s "Certificates expiring in 30 days or less on $HOSTNAME" $RECIPIENT < temp_30d.dat
+elif [ -e "temp_1y.dat" ]
+then
+    mail -s "Certificates expiring in 1 year or less on $HOSTNAME" $RECIPIENT < temp_1y.dat
+else
+    :
+fi
+
+#cleanup temp files
+rm temp_*.dat
 
 exit
