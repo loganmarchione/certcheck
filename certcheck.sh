@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Set variables for seconds
+#Set variables for time, measured in seconds
 seconds_1h=3600
 seconds_1d=$(($seconds_1h * 24))
 seconds_1w=$(($seconds_1d * 7))
@@ -20,7 +20,7 @@ while read CERTS; do
   then
     :
   else
-    echo "$cert_name will expire on $cert_date" >> temp_30d.dat
+    temp_30d="$temp_30d$cert_name will expire on $cert_date\n"                                                         
   fi
 done < $CERT_FILE
 
@@ -33,22 +33,21 @@ done < $CERT_FILE
 #  then
 #    :
 #  else
-#    echo "$cert_name will expire on $cert_date" >> temp_1y.dat
+#    temp_1y="$temp_1y$cert_name will expire on $cert_date\n"
 #  fi
 #done < $CERT_FILE
 
-#if files exist, email to alert
-if [ -e "temp_30.dat" ]
-  then
-    mail -s "Certificates expiring in 30 days or less on $HOSTNAME" $RECIPIENT < temp_30d.dat
-elif [ -e "temp_1y.dat" ]
+#if variables exist and are set to something, email to alert
+#the "-e" in the echo command parses the "\n" linebreaks above
+if [ -n "$temp_30d" ] 
 then
-    mail -s "Certificates expiring in 1 year or less on $HOSTNAME" $RECIPIENT < temp_1y.dat
+  echo -e $temp_30d | mail -s "Certificates expiring in 30 days or less on $HOSTNAME" -r "donotreply@$HOSTNAME" $RECIPIENT
+elif [ -n "$temp_1y" ]
+then
+  echo -e $temp_1y | mail -s "Certificates expiring in 1 year or less on $HOSTNAME" -r "donotreply@$HOSTNAME" $RECIPIENT
 else
     :
 fi
 
-#cleanup temp files
-rm temp_*.dat
 
 exit
