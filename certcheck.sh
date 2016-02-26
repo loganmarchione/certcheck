@@ -25,7 +25,7 @@ while read CERTS; do
 done < $CERT_FILE
 
 #check for certs expiring in 1 year or less, get their names and expiration dates
-#this is commented out because 1 year is too long
+#this is commented out because 1 year is too long, mainly used for testing
 #while read CERTS; do
 #  cert_name=`openssl x509 -subject -noout -in $CERTS | sed 's/^subject.*CN=\([a-zA-Z0-9\.\-\*]*\).*$/\1/'`
 #  cert_date=`openssl x509 -enddate -noout -in $CERTS | sed 's/.*=//'`
