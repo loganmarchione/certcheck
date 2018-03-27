@@ -1,14 +1,14 @@
-#certcheck
+# certcheck
 Bash script to check expiration date on SSL certificates.  
 Emails user(s) to alert of expiring certificates.
 
-##Requirements
+## Requirements
 Should work with any Linux distro with standard tools installed (openssl, curl, grep, etc...).  
 Requires a MTA (such as Exim4 or Postfix). My setup is described [here](https://loganmarchione.com/2015/03/digitalocean-lemp-wordpress/#Enable_email).  
 Tested on Ubuntu 14.04.  
 Create a file in /etc/nginx/ssl called certs.dat, and list the locations of all your certificates (example below).
 
-##Usage
+## Usage
 Example of certs.dat file is below.
 ```
 /etc/nginx/ssl/site1.com/unified.crt
